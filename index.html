@@ -1,0 +1,75 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Translate</title>
+    <link type="text/css" rel="stylesheet" href="jquery.mobile-1.1.0.min.css">
+
+    <script src="jquery-1.7.2.min.js"></script>
+    <script src="jquery.mobile-1.1.0.min.js"></script>
+    <script src="underscore-min.js"></script>
+    <script src="backbone-min.js"></script>
+
+</head>
+<body>
+    <div data-role="page">
+        <div data-role="header">
+            <h1>Translate your text from russian to english</h1>
+        </div><!-- /header -->
+        <div data-role="content">
+            <p>
+                <label for="input">Input</label>
+                <input type="text" name="input" id="input">
+            </p>
+            <p>
+                <label for="output">Output</label>
+                <input type="text" name="result" readonly="readonly" id="output">
+            </p>
+            <input type="button" value="Translate" data-theme="a">
+        </div><!-- /content -->
+        <div data-role="footer">
+            <h4></h4>
+        </div><!-- /header -->
+    </div><!-- /page -->
+</body>
+<script type="text/javascript">
+    AppView = Backbone.View.extend({
+        el: $('body')
+        , events : {
+            "keyup #input": "translate"
+        }
+        , translate: function(event) {
+            var t = $(event.currentTarget)
+                , v = t.val().split('')
+                , o = $('#output')
+                , res = []
+                , enP = /[a-zA-Z\{\}]/
+                , ruP = /[а-яА-Я]/;
+
+
+            var en = 'qwertyuiop[]asdfghjkl;\'\\`zxcvbnm,.\/QWERTYUIOP{}ASDFGHJKL:"|~ZXCVBNM<>?';
+            var ru = 'йцукенгшщзхъфывапролджэ]ячсмитьбю.ЙЦУКЕНГШЩЗХЪФЫВАПРОЛДЖЭ/[ЯЧСМИТЬБЮ,';
+
+
+            for (var i=0; i < v.length; i++) {
+                var index;
+                if (true === ruP.test(v[i])) {
+                    index = ru.indexOf(v[i]);
+                    res.push(en[index]);
+                } else if ( true === enP.test(v[i]) ) {
+                    index = en.indexOf(v[i]);
+                    res.push(ru[index]);
+                } else {
+                    res.push(v[i]);
+                }
+
+
+            }
+            console.log('Key ' + event.keyCode);
+
+            o.val(res.join(''));
+        }
+    });
+    app = new AppView();
+</script>
+</html>
